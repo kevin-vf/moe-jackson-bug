@@ -1,0 +1,56 @@
+/************************/
+/** Build Script Setup **/
+/************************/
+
+buildscript {
+    ext.versions = [
+        kotlin: '1.0.3',
+        moeGradle: '1.2.4',
+        jackson: '2.8.1',
+    ]
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.multi-os-engine:moe-gradle:$versions.moeGradle"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+    }
+}
+
+/*******************/
+/** Project Setup **/
+/*******************/
+
+apply plugin: 'moe'
+apply plugin: 'kotlin'
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+repositories {
+    jcenter()
+}
+
+test { exclude '**' }
+
+// Setup MOE
+moe {
+    xcode.mainTarget = 'MoeJackson'
+    xcode.testTarget = 'MoeJackson-Test'
+    xcode.packageName = 'com.vfpowertech.moejackson'
+    xcode.launchScreenFilePath = 'src/main/resources/LaunchScreen.xib'
+    xcode.bundleID = 'com.vfpowertech.MoeJackson'
+    xcode.generateProject = false
+    xcode.xcodeProjectDirPath = 'xcode'
+}
+
+// Set dependencies
+dependencies {
+    compile fileTree(dir: 'lib', include: '*.jar')
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$versions.jackson"
+    compile "com.fasterxml.jackson.core:jackson-databind:$versions.jackson"
+}
